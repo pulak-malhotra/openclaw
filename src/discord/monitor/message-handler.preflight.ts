@@ -362,6 +362,10 @@ export async function preflightDiscordMessage(
       (message.mentionedRoles?.length ?? 0) > 0 ||
       (message.mentionedEveryone && (!author.bot || sender.isPluralKit))),
   );
+  const hasUserOrRoleMention = Boolean(
+    !isDirectMessage &&
+    ((message.mentionedUsers?.length ?? 0) > 0 || (message.mentionedRoles?.length ?? 0) > 0),
+  );
 
   if (
     isGuildMessage &&
@@ -646,10 +650,16 @@ export async function preflightDiscordMessage(
 
   const ignoreOtherMentions =
     channelConfig?.ignoreOtherMentions ?? guildInfo?.ignoreOtherMentions ?? false;
-  if (isGuildMessage && ignoreOtherMentions && hasAnyMention && !wasMentioned && !implicitMention) {
+  if (
+    isGuildMessage &&
+    ignoreOtherMentions &&
+    hasUserOrRoleMention &&
+    !wasMentioned &&
+    !implicitMention
+  ) {
     logDebug(`[discord-preflight] drop: other-mention`);
     logVerbose(
-      `discord: drop guild message (another user/bot mentioned, ignoreOtherMentions=true, botId=${botId})`,
+      `discord: drop guild message (another user/role mentioned, ignoreOtherMentions=true, botId=${botId})`,
     );
     recordPendingHistoryEntryIfEnabled({
       historyMap: params.guildHistories,
