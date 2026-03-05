@@ -30,7 +30,9 @@ export type MentionGateWithBypassResult = MentionGateResult & {
 export function resolveMentionGating(params: MentionGateParams): MentionGateResult {
   const implicit = params.implicitMention === true;
   const bypass = params.shouldBypassMention === true;
-  const effectiveWasMentioned = params.wasMentioned || implicit || bypass;
+  // Implicit mention (thread participation) should not override an explicit requireMention setting
+  const effectiveWasMentioned =
+    params.wasMentioned || (!params.requireMention && implicit) || bypass;
   const shouldSkip = params.requireMention && params.canDetectMention && !effectiveWasMentioned;
   return { effectiveWasMentioned, shouldSkip };
 }
