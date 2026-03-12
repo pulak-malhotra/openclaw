@@ -2,9 +2,21 @@ import { describe, expect, it } from "vitest";
 import { resolveMentionGating, resolveMentionGatingWithBypass } from "./mention-gating.js";
 
 describe("resolveMentionGating", () => {
-  it("combines explicit, implicit, and bypass mentions", () => {
+  it("implicit mention does not override requireMention", () => {
     const res = resolveMentionGating({
       requireMention: true,
+      canDetectMention: true,
+      wasMentioned: false,
+      implicitMention: true,
+      shouldBypassMention: false,
+    });
+    expect(res.effectiveWasMentioned).toBe(false);
+    expect(res.shouldSkip).toBe(true);
+  });
+
+  it("implicit mention counts when requireMention is false", () => {
+    const res = resolveMentionGating({
+      requireMention: false,
       canDetectMention: true,
       wasMentioned: false,
       implicitMention: true,
