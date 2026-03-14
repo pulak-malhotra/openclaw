@@ -43,7 +43,7 @@ export function getSessionSnapshot(
     threadStarterBody: ctx?.threadStarterBody ?? null,
     parentSessionKey: ctx?.parentSessionKey ?? null,
   });
-  const resetType = resolveSessionResetType({ sessionKey: key, isGroup: ctx?.isGroup, isThread });
+  const resetType = resolveSessionResetType({ sessionKey: key });
   const channelReset = resolveChannelResetConfig({
     sessionCfg,
     channel: entry?.lastChannel ?? entry?.channel,

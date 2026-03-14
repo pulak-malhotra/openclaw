@@ -195,7 +195,7 @@ export async function initSessionState(params: {
     threadStarterBody: ctx.ThreadStarterBody,
     parentSessionKey: ctx.ParentSessionKey,
   });
-  const resetType = resolveSessionResetType({ sessionKey, isGroup, isThread });
+  const resetType = resolveSessionResetType({ sessionKey });
   const channelReset = resolveChannelResetConfig({
     sessionCfg,
     channel:
